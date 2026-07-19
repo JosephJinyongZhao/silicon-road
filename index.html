@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>硅基路 · AI时代的新型咨询</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --ink-light: #3a3a3a;
+    --ink-faint: #6a6a6a;
+    --paper: #f8f5f0;
+    --paper-warm: #f0ebe3;
+    --gold: #b8956a;
+    --gold-light: #d4b896;
+    --jade: #6b8e7f;
+    --jade-light: #a8c4b8;
+    --mist: rgba(200, 195, 188, 0.3);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: 'Noto Serif SC', 'STSong', serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Scroll Reveal ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  /* ===== Navigation ===== */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.4s ease;
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(248, 245, 240, 0.92);
+    backdrop-filter: blur(12px);
+    padding: 1rem 4rem;
+    box-shadow: 0 1px 0 var(--mist);
+  }
+  .nav-logo {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+  }
+  .nav-logo span {
+    color: var(--gold);
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+  }
+  .nav-links a {
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--mist) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: -15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(184, 149, 106, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -20px) scale(1.05); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .hero-sub {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1.8;
+    max-width: 520px;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+  .hero-divider {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--gold-light), transparent);
+    margin-top: 4rem;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Section Common ===== */
+  section {
+    padding: 7rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.5rem;
+  }
+  .section-desc {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 2;
+    max-width: 600px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== Paradigm Shift ===== */
+  .paradigm {
+    background: var(--paper-warm);
+    padding: 7rem 4rem;
+    max-width: 100%;
+  }
+  .paradigm-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .shift-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 3rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+  .shift-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .shift-col h3 {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+  .shift-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--mist);
+  }
+  .shift-item .label {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+  .shift-item .text {
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
+  .shift-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 3rem;
+  }
+  .shift-arrow .line {
+    width: 1px;
+    height: 100%;
+    min-height: 200px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+  .shift-arrow svg {
+    width: 20px;
+    height: 20px;
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* ===== Three Pillars ===== */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 4rem;
+  }
+  .pillar-card {
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--mist);
+    background: rgba(255, 255, 255, 0.4);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .pillar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.04);
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .pillar-card:hover::before {
+    opacity: 1;
+  }
+  .pillar-icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .pillar-card h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+  .pillar-card p {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1.9;
+  }
+
+  /* ===== Scenarios ===== */
+  .scenarios {
+    padding: 7rem 4rem;
+    max-width: 100%;
+  }
+  .scenarios-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .scenario-list {
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .scenario-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--mist);
+    transition: all 0.4s;
+    align-items: start;
+  }
+  .scenario-item:hover {
+    padding-left: 1rem;
+    background: rgba(255,255,255,0.3);
+  }
+  .scenario-num {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+  }
+  .scenario-content h3 {
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+  .scenario-content p {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1.9;
+    max-width: 600px;
+  }
+
+  /* ===== Philosophy ===== */
+  .philosophy {
+    padding: 8rem 4rem;
+    text-align: center;
+    position: relative;
+  }
+  .philosophy::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(184, 149, 106, 0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .philosophy blockquote {
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    line-height: 2;
+    letter-spacing: 0.06em;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .philosophy blockquote::before {
+    content: '"';
+    position: absolute;
+    top: -3rem;
+    left: -1.5rem;
+    font-size: 4rem;
+    color: var(--gold-light);
+    opacity: 0.5;
+  }
+  .philosophy .quote-author {
+    margin-top: 2rem;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.2em;
+  }
+
+  /* ===== Process ===== */
+  .process {
+    background: var(--paper-warm);
+    padding: 7rem 4rem;
+    max-width: 100%;
+  }
+  .process-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 4rem;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 2.5rem;
+    left: 16.67%;
+    right: 16.67%;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold-light), var(--gold), var(--gold-light));
+    opacity: 0.4;
+  }
+  .process-step {
+    text-align: center;
+    padding: 0 2rem;
+  }
+  .step-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: var(--paper-warm);
+    margin: 0 auto 2rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s;
+  }
+  .process-step:hover .step-dot {
+    background: var(--gold);
+    box-shadow: 0 0 0 6px rgba(184, 149, 106, 0.15);
+  }
+  .process-step h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+  .process-step p {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1.9;
+  }
+
+  /* ===== CTA ===== */
+  .cta {
+    padding: 8rem 4rem;
+    text-align: center;
+  }
+  .cta h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+  }
+  .cta p {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 1rem 3rem;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+    transition: left 0.4s;
+    z-index: 0;
+  }
+  .cta-btn:hover::before {
+    left: 0;
+  }
+  .cta-btn span {
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s;
+  }
+  .cta-btn:hover span {
+    color: var(--paper);
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 3rem 4rem;
+    border-top: 1px solid var(--mist);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== Ink Wash Decoration ===== */
+  .ink-wash {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    pointer-events: none;
+    opacity: 0.03;
+    background: radial-gradient(ellipse at bottom right, var(--ink) 0%, transparent 70%);
+    z-index: 0;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav.scrolled { padding: 0.8rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .paradigm, .scenarios, .process { padding: 4rem 1.5rem; }
+    .shift-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .shift-arrow { display: none; }
+    .pillars-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .process-steps { grid-template-columns: 1fr; gap: 2rem; }
+    .process-steps::before { display: none; }
+    .philosophy { padding: 6rem 1.5rem; }
+    .cta { padding: 5rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  /* ===== Custom Cursor Glow (subtle) ===== */
+  .glow {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(184, 149, 106, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 0.1s ease-out;
+  }
+</style>
+</head>
+<body>
+
+<div class="glow" id="glow"></div>
+<div class="ink-wash"></div>
+
+<!-- Navigation -->
+<nav id="nav">
+  <div class="nav-logo">硅基路<span> ·</span></div>
+  <ul class="nav-links">
+    <li><a href="#paradigm">范式</a></li>
+    <li><a href="#pillars">能力</a></li>
+    <li><a href="#scenarios">场景</a></li>
+    <li><a href="#process">方式</a></li>
+    <li><a href="#contact">联系</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">AI ERA CONSULTING</div>
+  <h1>不是旧物种的升级<br>而是<em>新物种</em>的诞生</h1>
+  <p class="hero-sub">
+    用咨询的脑子 · AI的工具 · 陪跑的耐心<br>
+    服务想搞懂AI但没人带路的企业家
+  </p>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- Paradigm Shift -->
+<div class="paradigm" id="paradigm">
+  <div class="paradigm-inner">
+    <div class="reveal">
+      <div class="section-label">PARADIGM SHIFT</div>
+      <div class="section-title">从「提供答案」到「陪伴探索」</div>
+      <p class="section-desc">
+        传统咨询的价值链正在被AI重塑。<br>
+        信息差大幅缩小，框架AI能生成，标准答案不再是稀缺品。<br>
+        真正的价值在于——陪伴企业家在不确定性中找到自己的路。
+      </p>
+    </div>
+
+    <div class="shift-grid reveal">
+      <div class="shift-col">
+        <h3>传统咨询</h3>
+        <div class="shift-item">
+          <div class="label">价值锚点</div>
+          <div class="text">信息优势与专业框架</div>
+        </div>
+        <div class="shift-item">
+          <div class="label">交付方式</div>
+          <div class="text">标准化方法论与报告</div>
+        </div>
+        <div class="shift-item">
+          <div class="label">关系模式</div>
+          <div class="text">项目制，交付即终止</div>
+        </div>
+      </div>
+
+      <div class="shift-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <div class="shift-col">
+        <h3>新型咨询</h3>
+        <div class="shift-item">
+          <div class="label">价值锚点</div>
+          <div class="text">连接优势与陪伴探索</div>
+        </div>
+        <div class="shift-item">
+          <div class="label">交付方式</div>
+          <div class="text">个性化共创与持续迭代</div>
+        </div>
+        <div class="shift-item">
+          <div class="label">关系模式</div>
+          <div class="text">长期陪跑，领进门送一程</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Three Pillars -->
+<section id="pillars">
+  <div class="reveal">
+    <div class="section-label">CORE CAPABILITIES</div>
+    <div class="section-title">三位一体</div>
+    <p class="section-desc">
+      不是在某一块做得更强，而是更懂你的处境，<br>
+      并提供恰到好处的连接与支撑。
+    </p>
+  </div>
+
+  <div class="pillars-grid">
+    <div class="pillar-card reveal reveal-delay-1">
+      <span class="pillar-icon">棋</span>
+      <h3>咨询的脑子</h3>
+      <p>商学院训练出的结构化思维，多年企业运营积累的商业直觉。快速定位问题本质，拆解复杂决策。</p>
+    </div>
+    <div class="pillar-card reveal reveal-delay-2">
+      <span class="pillar-icon">器</span>
+      <h3>AI的工具</h3>
+      <p>站在AI变革最前沿，掌握最新工具能力。不是替代你的判断，而是放大你的决策半径与执行效率。</p>
+    </div>
+    <div class="pillar-card reveal reveal-delay-3">
+      <span class="pillar-icon">伴</span>
+      <h3>陪跑的耐心</h3>
+      <p>不是一次性交付答案，而是陪你走过从「知道」到「做到」的鸿沟。你的节奏，就是你的节奏。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Scenarios -->
+<div class="scenarios" id="scenarios">
+  <div class="scenarios-inner">
+    <div class="reveal">
+      <div class="section-label">SCENARIOS</div>
+      <div class="section-title">你可能正在面对的问题</div>
+      <p class="section-desc">
+        不需要你已经懂AI，只需要你有真实的商业困惑。
+      </p>
+    </div>
+
+    <div class="scenario-list">
+      <div class="scenario-item reveal">
+        <div class="scenario-num">01</div>
+        <div class="scenario-content">
+          <h3>战略方向分析</h3>
+          <p>行业在变，竞争格局在变，但看不清下一步该往哪走。需要有人帮你梳理信息、拆解变量、看清结构性机会。</p>
+        </div>
+      </div>
+      <div class="scenario-item reveal">
+        <div class="scenario-num">02</div>
+        <div class="scenario-content">
+          <h3>商业模式拆解</h3>
+          <p>知道AI可能改变自己的生意，但不知道怎么切入。需要从底层逻辑拆解，找到AI能真正产生杠杆的环节。</p>
+        </div>
+      </div>
+      <div class="scenario-item reveal">
+        <div class="scenario-num">03</div>
+        <div class="scenario-content">
+          <h3>财税与运营优化</h3>
+          <p>企业运转中有大量可优化空间，但缺乏系统视角。需要既懂业务又懂工具的人，帮你找到那个四两拨千斤的点。</p>
+        </div>
+      </div>
+      <div class="scenario-item reveal">
+        <div class="scenario-num">04</div>
+        <div class="scenario-content">
+          <h3>组织与团队AI化</h3>
+          <p>想推动团队用AI提效，但不知道怎么落地。需要从培训到工具选型到流程改造的全链路陪跑。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Philosophy -->
+<section class="philosophy reveal">
+  <blockquote>
+    我们不是用AI升级传统咨询，<br>
+    而是在AI重塑商业环境的背景下，<br>
+    重新定义咨询的价值——<br>
+    从提供标准答案，<br>
+    到陪伴企业家在不确定性中<br>
+    找到自己的路。
+  </blockquote>
+  <div class="quote-author">— 硅基路</div>
+</section>
+
+<!-- Process -->
+<div class="process" id="process">
+  <div class="process-inner">
+    <div class="reveal">
+      <div class="section-label">HOW WE WORK</div>
+      <div class="section-title">领进门，送一程</div>
+      <p class="section-desc">
+        不造风，不跟风，只逐风。<br>
+        用你的节奏，走你的路。
+      </p>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-dot"></div>
+        <h3>课前 · 问诊</h3>
+        <p>深度需求问卷，了解你的业务背景与核心困惑。提前准备定制化的案例与工具，确保每次对话都有针对性。</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-dot"></div>
+        <h3>课中 · 共创</h3>
+        <p>不是讲授，而是共同拆解。用AI工具实时演示，让你亲眼看到可能性。理论不超过五分之一，其余都是实操。</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-dot"></div>
+        <h3>课后 · 陪跑</h3>
+        <p>交付不是终点。课后持续跟进，解答落地中的具体问题。餐叙间碰撞的灵感，也可以变成下一步行动。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta reveal" id="contact">
+  <h2>想搞懂AI，但没人带路？</h2>
+  <p>
+    我们服务的不是所有人，而是那批有真实商业困惑、<br>
+    愿意在不确定性中探索的企业家。
+  </p>
+  <a href="#" class="cta-btn"><span>预约对谈</span></a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div>硅基路 · AI时代的新型咨询</div>
+  <div>不造风 · 不跟风 · 只逐风</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Fallback: if IntersectionObserver not supported, show everything
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+
+  // Safety timeout: force show all reveal elements after 2.5s
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+  }, 2500);
+
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // Cursor glow
+  const glow = document.getElementById('glow');
+  document.addEventListener('mousemove', (e) => {
+    glow.style.left = (e.clientX - 100) + 'px';
+    glow.style.top = (e.clientY - 100) + 'px';
+  });
+
+  // Smooth anchor scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
